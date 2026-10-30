@@ -1,126 +1,130 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KajLagbe</title>
-
+<title>KajLagbe - Job Marketplace</title>
 <style>
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f4f7fb;
-    color: #222;
-}
-
-header {
-    background: #123c69;
-    color: white;
-    padding: 22px;
-    text-align: center;
-}
-
-header h1 {
-    margin: 0;
-    font-size: 30px;
-}
-
-.hero {
-    text-align: center;
-    padding: 55px 20px;
-}
-
-.hero h2 {
-    color: #123c69;
-    font-size: 28px;
-}
-
-.hero p {
-    color: #666;
-}
-
-input {
-    width: 90%;
-    max-width: 400px;
-    padding: 14px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-}
-
-button {
-    padding: 14px 25px;
-    background: #16a36a;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    margin-top: 12px;
-}
-
-.services {
-    text-align: center;
-    padding: 25px;
-}
-
-.card {
-    background: white;
-    padding: 25px;
-    margin: 15px auto;
-    max-width: 400px;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px #ddd;
-}
-
-footer {
-    background: #123c69;
-    color: white;
-    text-align: center;
-    padding: 20px;
-}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial;background:#f2f6fc;color:#222}
+header{background:#123c69;color:white;padding:22px;text-align:center}
+header h1{margin:0;font-size:32px}
+nav{background:#0d2d4c;padding:14px;text-align:center}
+nav a{color:white;text-decoration:none;margin:10px}
+.container{max-width:700px;margin:25px auto;padding:15px}
+.box{background:white;padding:22px;border-radius:12px;margin-bottom:22px;box-shadow:0 3px 12px #ddd}
+h2{color:#123c69}
+input{width:100%;padding:13px;margin:8px 0;border:1px solid #ccc;border-radius:7px}
+button{background:#16a36a;color:white;border:0;padding:13px 20px;border-radius:7px;cursor:pointer;margin-top:8px}
+.job{background:white;padding:18px;border-radius:10px;margin:15px 0;border-left:5px solid #16a36a}
+.job h3{color:#123c69}
+footer{background:#123c69;color:white;text-align:center;padding:20px}
 </style>
 </head>
-
 <body>
-
 <header>
-    <h1>KajLagbe</h1>
-    <p>Find Local Jobs and Services</p>
+<h1>💼 KajLagbe</h1>
+<p>Find Local Jobs and Services</p>
 </header>
 
-<section class="hero">
-    <h2>Find Your Dream Job!</h2>
-    <p>Find jobs and services near you.</p>
+<nav>
+<a href="#home">Home</a>
+<a href="#post">Post Job</a>
+<a href="#jobs">Find Jobs</a>
+</nav>
 
-    <input type="text" placeholder="Search for jobs...">
-    <br>
-    <button>Search Jobs</button>
-</section>
+<div class="container" id="home">
+<div class="box">
+<h2>Welcome to KajLagbe!</h2>
+<p>Find your dream job near you.</p>
+<input id="search" placeholder="Search jobs..." oninput="showJobs()">
+</div>
 
-<section class="services">
-    <h2>Our Services</h2>
+<div class="box" id="post">
+<h2>📝 Post a Job</h2>
+<form id="jobForm">
+<input id="title" placeholder="Job Title" required>
+<input id="company" placeholder="Company Name" required>
+<input id="location" placeholder="Job Location" required>
+<input id="salary" placeholder="Salary (optional)">
+<button type="submit">Post Job</button>
+</form>
+</div>
 
-    <div class="card">
-        <h3>💼 Find Jobs</h3>
-        <p>Discover local job opportunities.</p>
-    </div>
-
-    <div class="card">
-        <h3>🛠️ Find Services</h3>
-        <p>Find trusted local services.</p>
-    </div>
-
-    <div class="card">
-        <h3>👤 Create Account</h3>
-        <p>Join KajLagbe today.</p>
-    </div>
-</section>
+<div class="box" id="jobs">
+<h2>Available Jobs</h2>
+<div id="jobList"></div>
+</div>
+</div>
 
 <footer>
-    <p>© 2026 KajLagbe</p>
+<p>© 2026 KajLagbe</p>
+<p>Find Jobs. Build Your Future.</p>
 </footer>
 
+<script>
+let jobs=JSON.parse(localStorage.getItem("kajlagbe_jobs")||"[]");
+
+function saveJobs(){
+localStorage.setItem("kajlagbe_jobs",JSON.stringify(jobs));
+}
+
+function showJobs(){
+const list=document.getElementById("jobList");
+const search=document.getElementById("search").value.toLowerCase();
+list.innerHTML="";
+
+const filtered=jobs.filter(job=>
+(job.title+" "+job.company+" "+job.location).toLowerCase().includes(search)
+);
+
+if(filtered.length===0){
+list.innerHTML="<p>No jobs found.</p>";
+}
+
+filtered.forEach(job=>{
+const card=document.createElement("div");
+card.className="job";
+
+const heading=document.createElement("h3");
+heading.textContent=job.title;
+
+const company=document.createElement("p");
+company.textContent="Company: "+job.company;
+
+const location=document.createElement("p");
+location.textContent="Location: "+job.location;
+
+const salary=document.createElement("p");
+salary.textContent="Salary: "+(job.salary||"Not specified");
+
+const apply=document.createElement("button");
+apply.textContent="Apply Now";
+apply.onclick=()=>alert("Demo only! Online applications are not connected yet.");
+
+card.append(heading,company,location,salary,apply);
+list.appendChild(card);
+});
+}
+
+document.getElementById("jobForm").addEventListener("submit",function(event){
+event.preventDefault();
+
+jobs.unshift({
+title:document.getElementById("title").value,
+company:document.getElementById("company").value,
+location:document.getElementById("location").value,
+salary:document.getElementById("salary").value
+});
+
+saveJobs();
+showJobs();
+this.reset();
+alert("Job posted successfully!");
+});
+
+showJobs();
+</script>
 </body>
 </html>
