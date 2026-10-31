@@ -1,50 +1,201 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KajLagbe - Login</title>
-
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KajLagbe - Job Marketplace</title>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial;background:#f2f6fc;color:#222}
-header{background:#123c69;color:white;padding:22px;text-align:center}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#f2f6fc;
+ color:#222;
+}
+header{
+ background:#123c69;
+ color:white;
+ padding:22px;
+ text-align:center;
+}
 header h1{margin:0;font-size:32px}
-nav{background:#0d2d4c;padding:14px;text-align:center}
-nav a{color:white;text-decoration:none;margin:10px}
-.container{max-width:700px;margin:25px auto;padding:15px}
-.box{background:white;padding:22px;border-radius:12px;margin-bottom:22px;box-shadow:0 3px 12px #ddd}
+nav{
+ background:#0d2d4c;
+ padding:14px;
+ text-align:center;
+}
+nav a{
+ color:white;
+ text-decoration:none;
+ margin:10px;
+ display:inline-block;
+}
+.container{
+ max-width:850px;
+ margin:25px auto;
+ padding:15px;
+}
+.box{
+ background:white;
+ padding:22px;
+ border-radius:12px;
+ margin-bottom:22px;
+ box-shadow:0 3px 12px #ddd;
+}
 h2{color:#123c69}
-input{width:100%;padding:13px;margin:8px 0;border:1px solid #ccc;border-radius:7px}
-button{background:#16a36a;color:white;border:0;padding:13px 20px;border-radius:7px;cursor:pointer;margin-top:8px}
-.job{background:white;padding:18px;border-radius:10px;margin:15px 0;border-left:5px solid #16a36a}
+input,select{
+ width:100%;
+ padding:13px;
+ margin:8px 0;
+ border:1px solid #ccc;
+ border-radius:7px;
+}
+button{
+ background:#16a36a;
+ color:white;
+ border:0;
+ padding:13px 20px;
+ border-radius:7px;
+ cursor:pointer;
+ margin:5px 3px;
+}
+button:hover{background:#118653}
+.secondary{background:#123c69}
+.danger{background:#dc3545}
+.job{
+ background:white;
+ padding:18px;
+ border-radius:10px;
+ margin:15px 0;
+ border-left:5px solid #16a36a;
+ box-shadow:0 2px 8px #ddd;
+}
 .job h3{color:#123c69}
-footer{background:#123c69;color:white;text-align:center;padding:20px}
+.hidden{display:none}
+.badge{
+ display:inline-block;
+ background:#e1f5ec;
+ color:#137447;
+ padding:6px 12px;
+ border-radius:20px;
+ font-size:13px;
+}
+footer{
+ background:#123c69;
+ color:white;
+ text-align:center;
+ padding:20px;
+}
+.small{text-align:center;color:#666}
+hr{border:0;border-top:1px solid #eee}
 </style>
 </head>
+
 <body>
+
 <header>
 <h1>💼 KajLagbe</h1>
-<p>Find Local Jobs and Services</p>
+<p>Find Local Jobs and Build Your Future</p>
 </header>
 
 <nav>
-<a href="#home">Home</a>
-<a href="#post">Post Job</a>
-<a href="#jobs">Find Jobs</a>
+<a href="#" onclick="showHome()">Home</a>
+<a href="#" onclick="showJobs()">Find Jobs</a>
+<a href="#" onclick="showAuth()">Login / Register</a>
+<a href="#" onclick="showDashboard()">Dashboard</a>
 </nav>
 
-<div class="container" id="home">
+<div class="container">
+
+<!-- HOME -->
+<section id="home">
 <div class="box">
 <h2>Welcome to KajLagbe!</h2>
 <p>Find your dream job near you.</p>
-<input id="search" placeholder="Search jobs..." oninput="showJobs()">
+<button onclick="showAuth()">Get Started</button>
+<button class="secondary" onclick="showJobs()">Explore Jobs</button>
 </div>
+</section>
 
-<div class="box" id="post">
-<h2>📝 Post a Job</h2>
+<!-- AUTH -->
+<section id="auth" class="hidden">
+
+<div class="box">
+<h2>🔐 Login</h2>
+
+<form id="loginForm">
+<input id="loginEmail" type="email"
+placeholder="Email Address" required>
+
+<input id="loginPassword" type="password"
+placeholder="Password" required>
+
+<button type="submit">Login</button>
+</form>
+
+<hr>
+
+<h2>📝 Create Account</h2>
+
+<form id="registerForm">
+
+<input id="regName" placeholder="Full Name" required>
+
+<input id="regEmail" type="email"
+placeholder="Email Address" required>
+
+<input id="regPassword" type="password"
+placeholder="Create Password (6+ characters)"
+minlength="6" required>
+
+<select id="regRole" required>
+<option value="">Select Account Type</option>
+<option value="seeker">Job Seeker</option>
+<option value="employer">Employer</option>
+</select>
+
+<input id="regPhone" type="tel"
+placeholder="Phone Number">
+
+<button type="submit">Register Now</button>
+
+</form>
+</div>
+</section>
+
+<!-- JOBS -->
+<section id="jobsSection" class="hidden">
+<div class="box">
+<h2>🔎 Find Available Jobs</h2>
+<input id="search" placeholder="Search jobs, company or location..."
+oninput="renderJobs()">
+<div id="jobList"></div>
+</div>
+</section>
+
+<!-- SEEKER DASHBOARD -->
+<section id="seekerDashboard" class="hidden">
+<div class="box">
+<h2>👤 Job Seeker Dashboard</h2>
+<div id="seekerInfo"></div>
+<button class="secondary" onclick="showJobs()">Find Jobs</button>
+<h3>My Applications</h3>
+<div id="myApplications"></div>
+</div>
+</section>
+
+<!-- EMPLOYER DASHBOARD -->
+<section id="employerDashboard" class="hidden">
+
+<div class="box">
+<h2>🏢 Employer Dashboard</h2>
+<div id="employerInfo"></div>
+
+<hr>
+
+<h3>📝 Post a New Job</h3>
+
 <form id="jobForm">
 <input id="title" placeholder="Job Title" required>
 <input id="company" placeholder="Company Name" required>
@@ -54,10 +205,18 @@ footer{background:#123c69;color:white;text-align:center;padding:20px}
 </form>
 </div>
 
-<div class="box" id="jobs">
-<h2>Available Jobs</h2>
-<div id="jobList"></div>
+<div class="box">
+<h2>📋 My Posted Jobs</h2>
+<div id="employerJobs"></div>
 </div>
+
+<div class="box">
+<h2>👥 Job Applicants</h2>
+<div id="applicantList"></div>
+</div>
+
+</section>
+
 </div>
 
 <footer>
@@ -66,67 +225,1001 @@ footer{background:#123c69;color:white;text-align:center;padding:20px}
 </footer>
 
 <script>
-let jobs=JSON.parse(localStorage.getItem("kajlagbe_jobs")||"[]");
 
-function saveJobs(){
-localStorage.setItem("kajlagbe_jobs",JSON.stringify(jobs));
+// DATABASE (DEMO ONLY)
+
+let users=JSON.parse(localStorage.getItem("kaj_users")||"[]");
+let jobs=JSON.parse(localStorage.getItem("kaj_jobs")||"[]");
+let applications=JSON.parse(localStorage.getItem("kaj_apps")||"[]");
+
+let currentUser=JSON.parse(sessionStorage.getItem("kaj_session")||"null");
+
+function saveData(){
+ localStorage.setItem("kaj_users",JSON.stringify(users));
+ localStorage.setItem("kaj_jobs",JSON.stringify(jobs));
+ localStorage.setItem("kaj_apps",JSON.stringify(applications));
+}
+
+function showSection(id){
+ document.querySelectorAll(".container section").forEach(s=>{
+  s.classList.add("hidden");
+ });
+ document.getElementById(id).classList.remove("hidden");
+}
+
+function showHome(){
+ showSection("home");
+}
+
+function showAuth(){
+ showSection("auth");
 }
 
 function showJobs(){
-const list=document.getElementById("jobList");
-const search=document.getElementById("search").value.toLowerCase();
-list.innerHTML="";
-
-const filtered=jobs.filter(job=>
-(job.title+" "+job.company+" "+job.location).toLowerCase().includes(search)
-);
-
-if(filtered.length===0){
-list.innerHTML="<p>No jobs found.</p>";
+ showSection("jobsSection");
+ renderJobs();
 }
 
-filtered.forEach(job=>{
-const card=document.createElement("div");
-card.className="job";
+// REGISTER
 
-const heading=document.createElement("h3");
-heading.textContent=job.title;
+document.getElementById("registerForm")
+.addEventListener("submit",function(e){
 
-const company=document.createElement("p");
-company.textContent="Company: "+job.company;
+ e.preventDefault();
 
-const location=document.createElement("p");
-location.textContent="Location: "+job.location;
+ let name=document.getElementById("regName").value.trim();
+ let email=document.getElementById("regEmail").value.trim().toLowerCase();
+ let password=document.getElementById("regPassword").value;
+ let role=document.getElementById("regRole").value;
+ let phone=document.getElementById("regPhone").value;
 
-const salary=document.createElement("p");
-salary.textContent="Salary: "+(job.salary||"Not specified");
+ if(users.some(u=>u.email===email)){
+  alert("This email is already registered!");
+  return;
+ }
 
-const apply=document.createElement("button");
-apply.textContent="Apply Now";
-apply.onclick=()=>alert("Demo only! Online applications are not connected yet.");
+ let user={
+  id:Date.now().toString(),
+  name,email,password,role,phone
+ };
 
-card.append(heading,company,location,salary,apply);
-list.appendChild(card);
+ users.push(user);
+ saveData();
+
+ alert("Registration successful! Please login.");
+ this.reset();
+
 });
+
+// LOGIN
+
+document.getElementById("loginForm")
+.addEventListener("submit",function(e){
+
+ e.preventDefault();
+
+ let email=document.getElementById("loginEmail")
+ .value.trim().toLowerCase();
+
+ let password=document.getElementById("loginPassword").value;
+
+ let user=users.find(u=>
+  u.email===email && u.password===password
+ );
+
+ if(!user){
+  alert("Incorrect email or password!");
+  return;
+ }
+
+ currentUser=user;
+ sessionStorage.setItem("kaj_session",JSON.stringify(user));
+
+ alert("Welcome "+user.name+"!");
+
+ this.reset();
+ showDashboard();
+
+});
+
+// DASHBOARD
+
+function showDashboard(){
+
+ if(!currentUser){
+  alert("Please login first!");
+  showAuth();
+  return;
+ }
+
+ if(currentUser.role==="seeker"){
+  showSection("seekerDashboard");
+  loadSeekerDashboard();
+ }else{
+  showSection("employerDashboard");
+  loadEmployerDashboard();
+ }
+
 }
 
-document.getElementById("jobForm").addEventListener("submit",function(event){
-event.preventDefault();
+// SEEKER DASHBOARD
 
-jobs.unshift({
-title:document.getElementById("title").value,
-company:document.getElementById("company").value,
-location:document.getElementById("location").value,
-salary:document.getElementById("salary").value
+function loadSeekerDashboard(){
+
+ document.getElementById("seekerInfo").innerHTML=
+ `<h3>${escapeHTML(currentUser.name)}</h3>
+ <p>Email: ${escapeHTML(currentUser.email)}</p>
+ <span class="badge">Job Seeker</span>
+ <button class="danger" onclick="logout()">Logout</button>`;
+
+ let mine=applications.filter(a=>a.seekerId===currentUser.id);
+
+ let html="";
+
+ mine.forEach(app=>{
+  let job=jobs.find(j=>j.id===app.jobId);
+
+  if(job){
+   html+=`
+   <div class="job">
+   <h3>${escapeHTML(job.title)}</h3>
+   <p>${escapeHTML(job.company)}</p>
+   <p>Location: ${escapeHTML(job.location)}</p>
+   <span class="badge">Applied</span>
+   </div>`;
+  }
+ });
+
+ document.getElementById("myApplications").innerHTML=
+ html||"<p>You have not applied for any jobs yet.</p>";
+
+}
+
+// EMPLOYER DASHBOARD
+
+function loadEmployerDashboard(){
+
+ document.getElementById("employerInfo").innerHTML=
+ `<h3>${escapeHTML(currentUser.name)}</h3>
+ <p>Email: ${escapeHTML(currentUser.email)}</p>
+ <span class="badge">Employer</span>
+ <button class="danger" onclick="logout()">Logout</button>`;
+
+ let mine=jobs.filter(j=>j.employerId===currentUser.id);
+
+ let html="";
+
+ mine.forEach(job=>{
+  html+=`
+  <div class="job">
+  <h3>${escapeHTML(job.title)}</h3>
+  <p>Company: ${escapeHTML(job.company)}</p>
+  <p>Location: ${escapeHTML(job.location)}</p>
+  <p>Salary: ${escapeHTML(job.salary||"Not specified")}</p>
+  <button class="danger" onclick="deleteJob('${job.id}')">
+  Delete Job
+  </button>
+  </div>`;
+ });
+
+ document.getElementById("employerJobs").innerHTML=
+ html||"<p>No jobs posted yet.</p>";
+
+ loadApplicants();
+
+}
+
+// POST JOB
+
+document.getElementById("jobForm")
+.addEventListener("submit",function(e){
+
+ e.preventDefault();
+
+ if(!currentUser||currentUser.role!=="employer"){
+  alert("Only employers can post jobs!");
+  return;
+ }
+
+ jobs.unshift({
+  id:Date.now().toString(),
+  title:document.getElementById("title").value.trim(),
+  company:document.getElementById("company").value.trim(),
+  location:document.getElementById("location").value.trim(),
+  salary:document.getElementById("salary").value.trim(),
+  employerId:currentUser.id
+ });
+
+ saveData();
+ this.reset();
+
+ alert("Job posted successfully!");
+
+ loadEmployerDashboard();
+
 });
 
-saveJobs();
-showJobs();
-this.reset();
-alert("Job posted successfully!");
-});
+// SHOW JOBS
 
-showJobs();
+function renderJobs(){
+
+ let list=document.getElementById("jobList");
+ let search=document.getElementById("search").value.toLowerCase();
+
+ let filtered=jobs.filter(job=>
+  (job.title+" "+job.company+" "+job.location)
+  .toLowerCase().includes(search)
+ );
+
+ list.innerHTML="";
+
+ if(filtered.length===0){
+  list.innerHTML="<p>No jobs found.</p>";
+ }
+
+ filtered.forEach(job=>{
+
+  let card=document.createElement("div");
+  card.className="job";
+
+  let heading=document.createElement("h3");
+  heading.textContent=job.title;
+
+  let company=document.createElement("p");
+  company.textContent="Company: "+job.company;
+
+  let location=document.createElement("p");
+  location.textContent="Location: "+job.location;
+
+  let salary=document.createElement("p");
+  salary.textContent="Salary: "+(job.salary||"Not specified");
+
+  let apply=document.createElement("button");
+  apply.textContent="Apply Now";
+  apply.onclick=()=>applyJob(job.id);
+
+  card.append(heading,company,location,salary,apply);
+  list.appendChild(card);
+
+ });
+
+}
+
+// APPLY JOB
+
+function applyJob(jobId){
+
+ if(!currentUser){
+  alert("Please login as a Job Seeker first!");
+  showAuth();
+  return;
+ }
+
+ if(currentUser.role!=="seeker"){
+  alert("Only Job Seekers can apply!");
+  return;
+ }
+
+ let already=applications.some(a=>
+  a.jobId===jobId && a.seekerId===currentUser.id
+ );
+
+ if(already){
+  alert("You have already applied!");
+  return;
+ }
+
+ applications.push({
+  id:Date.now().toString(),
+  jobId:jobId,
+  seekerId:currentUser.id
+ });
+
+ saveData();
+
+ alert("Application submitted successfully!");
+
+}
+
+// VIEW APPLICANTS
+
+function loadApplicants(){
+
+ let html="";
+
+ let mine=jobs.filter(j=>j.employerId===currentUser.id);
+
+ mine.forEach(job=>{
+
+  let apps=applications.filter(a=>a.jobId===job.id);
+
+  apps.forEach(app=>{
+
+   let seeker=users.find(u=>u.id===app.seekerId);
+
+   if(seeker){
+    html+=`
+    <div class="job">
+    <h3>${escapeHTML(job.title)}</h3>
+    <p>Applicant: ${escapeHTML(seeker.name)}</p>
+    <p>Email: ${escapeHTML(seeker.email)}</p>
+    <p>Phone: ${escapeHTML(seeker.phone||"Not provided")}</p>
+    </div>`;
+   }
+
+  });
+
+ });
+
+ document.getElementById("applicantList").innerHTML=
+ html||"<p>No applicants yet.</p>";
+
+}
+
+// DELETE JOB
+
+function deleteJob(id){
+
+ if(!confirm("Are you sure you want to delete this job?"))return;
+
+ let job=jobs.find(j=>j.id===id);
+
+ if(!job||job.employerId!==currentUser.id)return;
+
+ jobs=jobs.filter(j=>j.id!==id);
+ applications=applications.filter(a=>a.jobId!==id);
+
+ saveData();
+ loadEmployerDashboard();
+
+}
+
+// LOGOUT
+
+function logout(){
+
+ currentUser=null;
+ sessionStorage.removeItem("kaj_session");
+
+ alert("Logged out successfully!");
+ showHome();
+
+}
+
+// BASIC HTML ESCAPE
+
+function escapeHTML(value){
+ return String(value??"").replace(/[&<>"']/g,c=>({
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#39;"
+ }[c]));
+}
+
+// INITIAL PAGE
+
+if(currentUser){
+ showDashboard();
+}else{
+ showHome();
+}
+
 </script>
+
 </body>
 </html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KajLagbe - Job Marketplace</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#f2f6fc;
+ color:#222;
+}
+header{
+ background:#123c69;
+ color:white;
+ padding:22px;
+ text-align:center;
+}
+header h1{margin:0;font-size:32px}
+nav{
+ background:#0d2d4c;
+ padding:14px;
+ text-align:center;
+}
+nav a{
+ color:white;
+ text-decoration:none;
+ margin:10px;
+ display:inline-block;
+}
+.container{
+ max-width:850px;
+ margin:25px auto;
+ padding:15px;
+}
+.box{
+ background:white;
+ padding:22px;
+ border-radius:12px;
+ margin-bottom:22px;
+ box-shadow:0 3px 12px #ddd;
+}
+h2{color:#123c69}
+input,select{
+ width:100%;
+ padding:13px;
+ margin:8px 0;
+ border:1px solid #ccc;
+ border-radius:7px;
+}
+button{
+ background:#16a36a;
+ color:white;
+ border:0;
+ padding:13px 20px;
+ border-radius:7px;
+ cursor:pointer;
+ margin:5px 3px;
+}
+button:hover{background:#118653}
+.secondary{background:#123c69}
+.danger{background:#dc3545}
+.job{
+ background:white;
+ padding:18px;
+ border-radius:10px;
+ margin:15px 0;
+ border-left:5px solid #16a36a;
+ box-shadow:0 2px 8px #ddd;
+}
+.job h3{color:#123c69}
+.hidden{display:none}
+.badge{
+ display:inline-block;
+ background:#e1f5ec;
+ color:#137447;
+ padding:6px 12px;
+ border-radius:20px;
+ font-size:13px;
+}
+footer{
+ background:#123c69;
+ color:white;
+ text-align:center;
+ padding:20px;
+}
+.small{text-align:center;color:#666}
+hr{border:0;border-top:1px solid #eee}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>💼 KajLagbe</h1>
+<p>Find Local Jobs and Build Your Future</p>
+</header>
+
+<nav>
+<a href="#" onclick="showHome()">Home</a>
+<a href="#" onclick="showJobs()">Find Jobs</a>
+<a href="#" onclick="showAuth()">Login / Register</a>
+<a href="#" onclick="showDashboard()">Dashboard</a>
+</nav>
+
+<div class="container">
+
+<!-- HOME -->
+<section id="home">
+<div class="box">
+<h2>Welcome to KajLagbe!</h2>
+<p>Find your dream job near you.</p>
+<button onclick="showAuth()">Get Started</button>
+<button class="secondary" onclick="showJobs()">Explore Jobs</button>
+</div>
+</section>
+
+<!-- AUTH -->
+<section id="auth" class="hidden">
+
+<div class="box">
+<h2>🔐 Login</h2>
+
+<form id="loginForm">
+<input id="loginEmail" type="email"
+placeholder="Email Address" required>
+
+<input id="loginPassword" type="password"
+placeholder="Password" required>
+
+<button type="submit">Login</button>
+</form>
+
+<hr>
+
+<h2>📝 Create Account</h2>
+
+<form id="registerForm">
+
+<input id="regName" placeholder="Full Name" required>
+
+<input id="regEmail" type="email"
+placeholder="Email Address" required>
+
+<input id="regPassword" type="password"
+placeholder="Create Password (6+ characters)"
+minlength="6" required>
+
+<select id="regRole" required>
+<option value="">Select Account Type</option>
+<option value="seeker">Job Seeker</option>
+<option value="employer">Employer</option>
+</select>
+
+<input id="regPhone" type="tel"
+placeholder="Phone Number">
+
+<button type="submit">Register Now</button>
+
+</form>
+</div>
+</section>
+
+<!-- JOBS -->
+<section id="jobsSection" class="hidden">
+<div class="box">
+<h2>🔎 Find Available Jobs</h2>
+<input id="search" placeholder="Search jobs, company or location..."
+oninput="renderJobs()">
+<div id="jobList"></div>
+</div>
+</section>
+
+<!-- SEEKER DASHBOARD -->
+<section id="seekerDashboard" class="hidden">
+<div class="box">
+<h2>👤 Job Seeker Dashboard</h2>
+<div id="seekerInfo"></div>
+<button class="secondary" onclick="showJobs()">Find Jobs</button>
+<h3>My Applications</h3>
+<div id="myApplications"></div>
+</div>
+</section>
+
+<!-- EMPLOYER DASHBOARD -->
+<section id="employerDashboard" class="hidden">
+
+<div class="box">
+<h2>🏢 Employer Dashboard</h2>
+<div id="employerInfo"></div>
+
+<hr>
+
+<h3>📝 Post a New Job</h3>
+
+<form id="jobForm">
+<input id="title" placeholder="Job Title" required>
+<input id="company" placeholder="Company Name" required>
+<input id="location" placeholder="Job Location" required>
+<input id="salary" placeholder="Salary (optional)">
+<button type="submit">Post Job</button>
+</form>
+</div>
+
+<div class="box">
+<h2>📋 My Posted Jobs</h2>
+<div id="employerJobs"></div>
+</div>
+
+<div class="box">
+<h2>👥 Job Applicants</h2>
+<div id="applicantList"></div>
+</div>
+
+</section>
+
+</div>
+
+<footer>
+<p>© 2026 KajLagbe</p>
+<p>Find Jobs. Build Your Future.</p>
+</footer>
+
+<script>
+
+// DATABASE (DEMO ONLY)
+
+let users=JSON.parse(localStorage.getItem("kaj_users")||"[]");
+let jobs=JSON.parse(localStorage.getItem("kaj_jobs")||"[]");
+let applications=JSON.parse(localStorage.getItem("kaj_apps")||"[]");
+
+let currentUser=JSON.parse(sessionStorage.getItem("kaj_session")||"null");
+
+function saveData(){
+ localStorage.setItem("kaj_users",JSON.stringify(users));
+ localStorage.setItem("kaj_jobs",JSON.stringify(jobs));
+ localStorage.setItem("kaj_apps",JSON.stringify(applications));
+}
+
+function showSection(id){
+ document.querySelectorAll(".container section").forEach(s=>{
+  s.classList.add("hidden");
+ });
+ document.getElementById(id).classList.remove("hidden");
+}
+
+function showHome(){
+ showSection("home");
+}
+
+function showAuth(){
+ showSection("auth");
+}
+
+function showJobs(){
+ showSection("jobsSection");
+ renderJobs();
+}
+
+// REGISTER
+
+document.getElementById("registerForm")
+.addEventListener("submit",function(e){
+
+ e.preventDefault();
+
+ let name=document.getElementById("regName").value.trim();
+ let email=document.getElementById("regEmail").value.trim().toLowerCase();
+ let password=document.getElementById("regPassword").value;
+ let role=document.getElementById("regRole").value;
+ let phone=document.getElementById("regPhone").value;
+
+ if(users.some(u=>u.email===email)){
+  alert("This email is already registered!");
+  return;
+ }
+
+ let user={
+  id:Date.now().toString(),
+  name,email,password,role,phone
+ };
+
+ users.push(user);
+ saveData();
+
+ alert("Registration successful! Please login.");
+ this.reset();
+
+});
+
+// LOGIN
+
+document.getElementById("loginForm")
+.addEventListener("submit",function(e){
+
+ e.preventDefault();
+
+ let email=document.getElementById("loginEmail")
+ .value.trim().toLowerCase();
+
+ let password=document.getElementById("loginPassword").value;
+
+ let user=users.find(u=>
+  u.email===email && u.password===password
+ );
+
+ if(!user){
+  alert("Incorrect email or password!");
+  return;
+ }
+
+ currentUser=user;
+ sessionStorage.setItem("kaj_session",JSON.stringify(user));
+
+ alert("Welcome "+user.name+"!");
+
+ this.reset();
+ showDashboard();
+
+});
+
+// DASHBOARD
+
+function showDashboard(){
+
+ if(!currentUser){
+  alert("Please login first!");
+  showAuth();
+  return;
+ }
+
+ if(currentUser.role==="seeker"){
+  showSection("seekerDashboard");
+  loadSeekerDashboard();
+ }else{
+  showSection("employerDashboard");
+  loadEmployerDashboard();
+ }
+
+}
+
+// SEEKER DASHBOARD
+
+function loadSeekerDashboard(){
+
+ document.getElementById("seekerInfo").innerHTML=
+ `<h3>${escapeHTML(currentUser.name)}</h3>
+ <p>Email: ${escapeHTML(currentUser.email)}</p>
+ <span class="badge">Job Seeker</span>
+ <button class="danger" onclick="logout()">Logout</button>`;
+
+ let mine=applications.filter(a=>a.seekerId===currentUser.id);
+
+ let html="";
+
+ mine.forEach(app=>{
+  let job=jobs.find(j=>j.id===app.jobId);
+
+  if(job){
+   html+=`
+   <div class="job">
+   <h3>${escapeHTML(job.title)}</h3>
+   <p>${escapeHTML(job.company)}</p>
+   <p>Location: ${escapeHTML(job.location)}</p>
+   <span class="badge">Applied</span>
+   </div>`;
+  }
+ });
+
+ document.getElementById("myApplications").innerHTML=
+ html||"<p>You have not applied for any jobs yet.</p>";
+
+}
+
+// EMPLOYER DASHBOARD
+
+function loadEmployerDashboard(){
+
+ document.getElementById("employerInfo").innerHTML=
+ `<h3>${escapeHTML(currentUser.name)}</h3>
+ <p>Email: ${escapeHTML(currentUser.email)}</p>
+ <span class="badge">Employer</span>
+ <button class="danger" onclick="logout()">Logout</button>`;
+
+ let mine=jobs.filter(j=>j.employerId===currentUser.id);
+
+ let html="";
+
+ mine.forEach(job=>{
+  html+=`
+  <div class="job">
+  <h3>${escapeHTML(job.title)}</h3>
+  <p>Company: ${escapeHTML(job.company)}</p>
+  <p>Location: ${escapeHTML(job.location)}</p>
+  <p>Salary: ${escapeHTML(job.salary||"Not specified")}</p>
+  <button class="danger" onclick="deleteJob('${job.id}')">
+  Delete Job
+  </button>
+  </div>`;
+ });
+
+ document.getElementById("employerJobs").innerHTML=
+ html||"<p>No jobs posted yet.</p>";
+
+ loadApplicants();
+
+}
+
+// POST JOB
+
+document.getElementById("jobForm")
+.addEventListener("submit",function(e){
+
+ e.preventDefault();
+
+ if(!currentUser||currentUser.role!=="employer"){
+  alert("Only employers can post jobs!");
+  return;
+ }
+
+ jobs.unshift({
+  id:Date.now().toString(),
+  title:document.getElementById("title").value.trim(),
+  company:document.getElementById("company").value.trim(),
+  location:document.getElementById("location").value.trim(),
+  salary:document.getElementById("salary").value.trim(),
+  employerId:currentUser.id
+ });
+
+ saveData();
+ this.reset();
+
+ alert("Job posted successfully!");
+
+ loadEmployerDashboard();
+
+});
+
+// SHOW JOBS
+
+function renderJobs(){
+
+ let list=document.getElementById("jobList");
+ let search=document.getElementById("search").value.toLowerCase();
+
+ let filtered=jobs.filter(job=>
+  (job.title+" "+job.company+" "+job.location)
+  .toLowerCase().includes(search)
+ );
+
+ list.innerHTML="";
+
+ if(filtered.length===0){
+  list.innerHTML="<p>No jobs found.</p>";
+ }
+
+ filtered.forEach(job=>{
+
+  let card=document.createElement("div");
+  card.className="job";
+
+  let heading=document.createElement("h3");
+  heading.textContent=job.title;
+
+  let company=document.createElement("p");
+  company.textContent="Company: "+job.company;
+
+  let location=document.createElement("p");
+  location.textContent="Location: "+job.location;
+
+  let salary=document.createElement("p");
+  salary.textContent="Salary: "+(job.salary||"Not specified");
+
+  let apply=document.createElement("button");
+  apply.textContent="Apply Now";
+  apply.onclick=()=>applyJob(job.id);
+
+  card.append(heading,company,location,salary,apply);
+  list.appendChild(card);
+
+ });
+
+}
+
+// APPLY JOB
+
+function applyJob(jobId){
+
+ if(!currentUser){
+  alert("Please login as a Job Seeker first!");
+  showAuth();
+  return;
+ }
+
+ if(currentUser.role!=="seeker"){
+  alert("Only Job Seekers can apply!");
+  return;
+ }
+
+ let already=applications.some(a=>
+  a.jobId===jobId && a.seekerId===currentUser.id
+ );
+
+ if(already){
+  alert("You have already applied!");
+  return;
+ }
+
+ applications.push({
+  id:Date.now().toString(),
+  jobId:jobId,
+  seekerId:currentUser.id
+ });
+
+ saveData();
+
+ alert("Application submitted successfully!");
+
+}
+
+// VIEW APPLICANTS
+
+function loadApplicants(){
+
+ let html="";
+
+ let mine=jobs.filter(j=>j.employerId===currentUser.id);
+
+ mine.forEach(job=>{
+
+  let apps=applications.filter(a=>a.jobId===job.id);
+
+  apps.forEach(app=>{
+
+   let seeker=users.find(u=>u.id===app.seekerId);
+
+   if(seeker){
+    html+=`
+    <div class="job">
+    <h3>${escapeHTML(job.title)}</h3>
+    <p>Applicant: ${escapeHTML(seeker.name)}</p>
+    <p>Email: ${escapeHTML(seeker.email)}</p>
+    <p>Phone: ${escapeHTML(seeker.phone||"Not provided")}</p>
+    </div>`;
+   }
+
+  });
+
+ });
+
+ document.getElementById("applicantList").innerHTML=
+ html||"<p>No applicants yet.</p>";
+
+}
+
+// DELETE JOB
+
+function deleteJob(id){
+
+ if(!confirm("Are you sure you want to delete this job?"))return;
+
+ let job=jobs.find(j=>j.id===id);
+
+ if(!job||job.employerId!==currentUser.id)return;
+
+ jobs=jobs.filter(j=>j.id!==id);
+ applications=applications.filter(a=>a.jobId!==id);
+
+ saveData();
+ loadEmployerDashboard();
+
+}
+
+// LOGOUT
+
+function logout(){
+
+ currentUser=null;
+ sessionStorage.removeItem("kaj_session");
+
+ alert("Logged out successfully!");
+ showHome();
+
+}
+
+// BASIC HTML ESCAPE
+
+function escapeHTML(value){
+ return String(value??"").replace(/[&<>"']/g,c=>({
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#39;"
+ }[c]));
+}
+
+// INITIAL PAGE
+
+if(currentUser){
+ showDashboard();
+}else{
+ showHome();
+}
+
+</script>
+
+</body>
+  </html>
